@@ -1,7 +1,27 @@
 #include "test_framework/generic_test.h"
 short Parity(unsigned long long x) {
-  // TODO - you fill in here.
-  return 0;
+  static const std::vector<bool> lookup_table = []() {
+    // initialize parity lookup table for 16 bit integers
+    size_t size = 1 << 16;
+    std::vector<bool> table(size);
+
+    for (size_t x = 0; x < size; x++) {
+      size_t tmp = x;
+      for (size_t width = 8; width > 0; width >>= 1) {
+        tmp ^= (tmp >> width);
+      }
+      tmp &= 0x1;
+
+      table[x] = tmp;
+    }
+
+    return table;
+  }();
+
+  x ^= (x >> 32);
+  x ^= (x >> 16);
+  x &= 0xFFFF;
+  return lookup_table[x];
 }
 
 int main(int argc, char* argv[]) {
