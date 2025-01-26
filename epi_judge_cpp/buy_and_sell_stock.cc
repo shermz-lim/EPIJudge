@@ -1,10 +1,20 @@
 #include <vector>
+#include <cmath>
+#include <limits>
 
 #include "test_framework/generic_test.h"
 using std::vector;
 double BuyAndSellStockOnce(const vector<double>& prices) {
-  // TODO - you fill in here.
-  return 0.0;
+  double max_profit = 0;
+  double min_price = std::numeric_limits<double>::infinity();
+  for (double price : prices) {
+    // the max profit if we sell at this price is the
+    // price - min price seen so far
+    double max_profit_i = price - min_price;
+    max_profit = fmax(max_profit, max_profit_i);
+    min_price = fmin(min_price, price);
+  }
+  return max_profit;
 }
 
 int main(int argc, char* argv[]) {
