@@ -8,21 +8,34 @@ using std::length_error;
 class Stack {
  public:
   bool Empty() const {
-    // TODO - you fill in here.
-    return true;
+    return s.empty();
   }
   int Max() const {
-    // TODO - you fill in here.
-    return 0;
+    return s.top().max_val;
   }
   int Pop() {
-    // TODO - you fill in here.
-    return 0;
+    int data = s.top().data;
+    s.pop();
+    return data;
   }
   void Push(int x) {
-    // TODO - you fill in here.
+    int max_val = s.empty()
+      ? x
+      : std::max(x, s.top().max_val);
+    s.emplace(
+      x,
+      max_val
+    );
     return;
   }
+
+ private:
+  struct Node {
+    int data;
+    int max_val;
+  };
+
+  std::stack<Node> s{};
 };
 struct StackOp {
   std::string op;
