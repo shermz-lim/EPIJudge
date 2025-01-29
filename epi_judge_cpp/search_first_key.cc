@@ -4,8 +4,17 @@
 using std::vector;
 
 int SearchFirstOfK(const vector<int>& A, int k) {
-  // TODO - you fill in here.
-  return 0;
+  int low = 0;
+  int high = A.size();
+  while (low < high) {
+    int mid = low + (high - low) / 2;
+    if (A[mid] < k) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  return (low >= A.size() || A[low] != k) ? -1 : low;
 }
 
 int main(int argc, char* argv[]) {
