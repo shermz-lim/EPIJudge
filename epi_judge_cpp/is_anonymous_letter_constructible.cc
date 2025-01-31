@@ -5,7 +5,16 @@ using std::string;
 
 bool IsLetterConstructibleFromMagazine(const string& letter_text,
                                        const string& magazine_text) {
-  // TODO - you fill in here.
+  std::unordered_map<char, int> char_freq{};
+  for (char c : magazine_text) {
+    char_freq[c]++;
+  }
+  for (char c : letter_text) {
+    char_freq[c]--;
+    if (char_freq[c] < 0) {
+      return false;
+    }
+  }
   return true;
 }
 
