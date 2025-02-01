@@ -10,9 +10,28 @@ using std::array;
 using std::stack;
 using std::vector;
 const int kNumPegs = 3;
+
+namespace {
+
+void get_hanoi_moves(
+  int src_peg, int dest_peg, int num_rings, vector<vector<int>>& moves
+) {
+  if (num_rings == 1) {
+    moves.emplace_back(vector<int>{src_peg, dest_peg});
+    return;
+  }
+  int tmp_peg = 3 - src_peg - dest_peg;
+  get_hanoi_moves(src_peg, tmp_peg, num_rings - 1, moves);
+  moves.emplace_back(vector<int>{src_peg, dest_peg});
+  get_hanoi_moves(tmp_peg, dest_peg, num_rings - 1, moves);
+}
+
+}
+
 vector<vector<int>> ComputeTowerHanoi(int num_rings) {
-  // TODO - you fill in here.
-  return {};
+  vector<vector<int>> moves{};
+  get_hanoi_moves(0, 1, num_rings, moves);
+  return moves;
 }
 void ComputeTowerHanoiWrapper(TimedExecutor& executor, int num_rings) {
   array<stack<int>, kNumPegs> pegs;
