@@ -5,8 +5,25 @@
 using std::unique_ptr;
 
 bool IsBinaryTreeBST(const unique_ptr<BinaryTreeNode<int>>& tree) {
-  // TODO - you fill in here.
-  return true;
+  std::function<bool(const unique_ptr<BinaryTreeNode<int>>&, int, int)> is_bst{};
+  is_bst = [&is_bst](const unique_ptr<BinaryTreeNode<int>>& root, int low, int high) {
+    if (!root) {
+      return true;
+    }
+
+    int data = root->data;
+    if (data < low || data > high) {
+      return false;
+    }
+    return is_bst(root->left, low, data) &&
+           is_bst(root->right, data, high);
+  };
+
+  return is_bst(
+    tree,
+    std::numeric_limits<int>::min(),
+    std::numeric_limits<int>::max()
+  );
 }
 
 int main(int argc, char* argv[]) {
