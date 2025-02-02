@@ -4,8 +4,25 @@
 using std::vector;
 
 bool HasThreeSum(vector<int> A, int t) {
-  // TODO - you fill in here.
-  return true;
+  std::sort(A.begin(), A.end());
+  for (int x : A) {
+    int t_new = t - x;
+    // two sum problem to find new_t, allowing for using the same entry
+    int i = 0;
+    int j = A.size() - 1;
+    while (i <= j) {
+      int a = A[i];
+      int b = A[j];
+      if (a + b == t_new) {
+        return true;
+      } else if (a + b < t_new) {
+        i++;
+      } else {
+        j--;
+      }
+    }
+  }
+  return false;
 }
 
 int main(int argc, char* argv[]) {
