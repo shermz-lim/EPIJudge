@@ -5,8 +5,29 @@ using std::vector;
 
 int NumCombinationsForFinalScore(int final_score,
                                  const vector<int>& individual_play_scores) {
-  // TODO - you fill in here.
-  return 0;
+  int n = individual_play_scores.size();
+  // init bottom-up dp array
+  std::vector<std::vector<int>> num_combis(
+    n, std::vector<int>(final_score + 1, 0)
+  );
+
+  // fill with starting values
+  for (int score = 0; score <= final_score; score += individual_play_scores[0]) {
+    num_combis[0][score] = 1;
+  }
+
+  // bottom-up dp
+  for (int i = 1; i < n; ++i) {
+    int play_score = individual_play_scores[i];
+    for (int score = 0; score <= final_score; ++score) {
+      num_combis[i][score] = num_combis[i - 1][score] + (
+        (score >= play_score)
+        ? num_combis[i][score - play_score]
+        : 0
+      );
+    }
+  }
+  return num_combis[n - 1][final_score];
 }
 
 int main(int argc, char* argv[]) {
