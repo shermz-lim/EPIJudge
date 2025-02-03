@@ -15,10 +15,54 @@ struct Coordinate {
 
   int x, y;
 };
+
+static const std::vector<std::pair<int,int>> dirs{
+  {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+};
+
+bool find_path(
+  const vector<vector<Color>>& maze,
+  const Coordinate& e,
+  const Coordinate& curr,
+  vector<Coordinate>& curr_path,
+  vector<vector<bool>>& visited
+) {
+  visited[curr.x][curr.y] = true;
+  curr_path.emplace_back(curr);
+
+  if (curr == e) {
+    // path found
+    return true;
+  }
+
+  for (const auto& dir : dirs) {
+    Coordinate neigh{curr.x + dir.first, curr.y + dir.second};
+    if (neigh.x < 0 || neigh.x >= maze.size() ||
+        neigh.y < 0 || neigh.y >= maze[0].size()) {
+      continue;
+    }
+    if (visited[neigh.x][neigh.y] || maze[neigh.x][neigh.y] == Color::kBlack) {
+      continue;
+    }
+    if (find_path(maze, e, neigh, curr_path, visited)) {
+      // found a path via curr -> neigh
+      return true;
+    }
+  }
+
+  // path not found via curr
+  curr_path.pop_back();
+  return false;
+}
+
 vector<Coordinate> SearchMaze(vector<vector<Color>> maze, const Coordinate& s,
                               const Coordinate& e) {
-  // TODO - you fill in here.
-  return {};
+  vector<vector<bool>> visited(
+    maze.size(), vector<bool>(maze[0].size(), false)
+  );
+  vector<Coordinate> curr_path{};
+  find_path(maze, e, s, curr_path, visited);
+  return curr_path;
 }
 
 namespace test_framework {
