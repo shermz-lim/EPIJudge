@@ -2,14 +2,30 @@
 #include <functional>
 #include <iterator>
 #include <vector>
+#include <random>
 
 #include "test_framework/generic_test.h"
 #include "test_framework/random_sequence_checker.h"
 #include "test_framework/timed_executor.h"
 using std::bind;
 using std::vector;
+
+namespace {
+
+int get_rand_no(int a, int b)
+{
+  static std::default_random_engine eng{std::random_device{}()};
+  return std::uniform_int_distribution<int>{a, b}(eng);
+}
+
+}
+
 void RandomSampling(int k, vector<int>* A_ptr) {
-  // TODO - you fill in here.
+  vector<int>& A = *A_ptr;
+  for (int i = 0; i < k; ++i) {
+    int chosen_idx = get_rand_no(i, A.size() - 1);
+    std::swap(A[i], A[chosen_idx]);
+  }
   return;
 }
 bool RandomSamplingRunner(TimedExecutor& executor, int k, vector<int> A) {
