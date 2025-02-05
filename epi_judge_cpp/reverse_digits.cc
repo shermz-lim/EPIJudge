@@ -1,7 +1,13 @@
 #include "test_framework/generic_test.h"
 long long Reverse(int x) {
-  // TODO - you fill in here.
-  return 0;
+  bool neg = x < 0;
+  long long res = 0;
+  while (x != 0) {
+    res *= 10;
+    res += abs(x % 10);
+    x /= 10;
+  }
+  return neg ? -res : res;
 }
 
 int main(int argc, char* argv[]) {
